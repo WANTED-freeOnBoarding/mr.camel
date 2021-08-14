@@ -15,28 +15,31 @@ export default class Product extends Component {
     return random;
   }
 
-  callRandomProduct() {
-    this.getNewItem(false);
-  }
-
   getNewItem(isIgnore) {
     const ignoreList = this.props.recentProducts
       .filter(item => item.ignore === true)
       .map(item => item.id);
-    ignoreList.push(parseInt(this.props.match.params.id));
+    const nowId = parseInt(this.props.match.params.id);
+    const nowProduct = this.props.productData.find(e => e.id === nowId);
+    ignoreList.push(nowId);
 
     const productList = this.props.productData.filter(
       item => !ignoreList.find(ignoreID => ignoreID === item.id),
     );
+
     if (productList.length === 0) {
       this.props.history.push(`/product/-1`);
     } else {
-      let random = this.getRandomValue(productList.length);
-      const nowProduct = productList[random];
       nowProduct.ignore = isIgnore;
       this.props.addRecentHistory(nowProduct);
-      this.props.history.push(`/product/${nowProduct.id}`);
+      let random = this.getRandomValue(productList.length);
+      const nextProduct = productList[random];
+      this.props.history.push(`/product/${nextProduct.id}`);
     }
+  }
+
+  callRandomProduct() {
+    this.getNewItem(false);
   }
 
   setIgnore() {
