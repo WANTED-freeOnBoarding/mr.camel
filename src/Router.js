@@ -14,7 +14,7 @@ class Router extends Component {
       mockData[i].id = i;
     }
     this.state = {
-      productData: mockData.filter((_, index) => index < 10),
+      productData: mockData,
       recentProducts: getRecentHistory() || [],
     };
     this.addRecentHistory = this.addRecentHistory.bind(this);

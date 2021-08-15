@@ -23,9 +23,7 @@ export default class Product extends Component {
     const nowProduct = this.props.productData.find(e => e.id === nowId);
     ignoreList.push(nowId);
 
-    const productList = this.props.productData.filter(
-      item => !ignoreList.find(ignoreID => ignoreID === item.id),
-    );
+    const productList = this.props.productData.filter(item => !ignoreList.includes(item.id));
 
     if (productList.length === 0) {
       this.props.history.push(`/product/-1`);
@@ -54,31 +52,50 @@ export default class Product extends Component {
     const data = this.props.productData.find(
       item => item.id === parseInt(this.props.match.params.id),
     );
-    const { title, brand, price, id } = data;
+
     return (
       <div className="content-container">
-        <div className="product-img"></div>
-        <div className="content">
-          <div className="content-info">
-            <p>{id}</p>
-            <h4>{title}</h4>
-            <h4>{brand}</h4>
-            <h4>{price} 원</h4>
-          </div>
-          <input
-            className="product-btn"
-            type="button"
-            value="랜덤 상품 조회"
-            onClick={this.callRandomProduct}
-          />
-          <input className="product-btn" type="button" value="관심 없음" onClick={this.setIgnore} />
-          <input
-            className="product-btn"
-            type="button"
-            value="최근 본 상품"
-            onClick={this.gotoRecentHistory}
-          />
-        </div>
+        {data ? (
+          <>
+            <div className="product-img" />
+            <div className="content">
+              <div className="content-info">
+                <p>{data.id}</p>
+                <h4>{data.title}</h4>
+                <h4>{data.brand}</h4>
+                <h4>{data.price} 원</h4>
+              </div>
+              <input
+                className="product-btn"
+                type="button"
+                value="랜덤 상품 조회"
+                onClick={this.callRandomProduct}
+              />
+              <input
+                className="product-btn"
+                type="button"
+                value="관심 없음"
+                onClick={this.setIgnore}
+              />
+              <input
+                className="product-btn"
+                type="button"
+                value="최근 본 상품"
+                onClick={this.gotoRecentHistory}
+              />
+            </div>
+          </>
+        ) : (
+          <>
+            '더 이상 조회할 상품이 없습니다'
+            <input
+              className="product-btn"
+              type="button"
+              value="최근 본 상품"
+              onClick={this.gotoRecentHistory}
+            />
+          </>
+        )}
       </div>
     );
   }
